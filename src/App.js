@@ -1,11 +1,11 @@
 import logo from "./logo.svg";
 import { useState } from "react";
 import "./App.css";
-function Square({ value, onSquareClick,highlight }) {
+function Square({ className,value, onSquareClick,highlight }) {
   return (
     <button
     onClick={onSquareClick}
-    className={`square ${highlight ? "square-winner" : ""}`}
+    className={`${className} ${highlight ? "square-winner" : ""}`}
   >
     {value}
   </button>
@@ -61,6 +61,7 @@ function Board({ xIsNext, squares, onPlay }) {
         const isHighlighted = lines?.includes(index);
         return (
           <Square
+            className="square"
             key={index}
             value={squares[index]}
             onSquareClick={() => handleClick(index)}
@@ -78,7 +79,39 @@ function Board({ xIsNext, squares, onPlay }) {
     </>
   );
 }
+function BoardToDisplay({ squares, xIsNext }) {
+  const {winner,lines} = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
 
+  const boardRows = [0, 1, 2].map((i) => (
+    <div key={i} className="board-row">
+      {[0, 1, 2].map((j) => {
+        const index = i * 3 + j;
+        const isHighlighted = lines?.includes(index);
+        return (
+          <Square
+            className="square-to-show"
+            key={index}
+            value={squares[index]}
+            highlight={isHighlighted}
+          />
+        );
+      })}
+    </div>
+  ));
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      {boardRows}
+    </>
+  );
+}
 function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
@@ -106,6 +139,7 @@ function Game() {
     return (
       <li key={move}>
         <button onClick={() => jumpTo(move)}>{description}</button>
+        {move  === 0 ? "": <BoardToDisplay squares={squares} xIsNext={move % 2 === 0} />}
       </li>
     );
   });

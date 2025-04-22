@@ -68,7 +68,23 @@ body {
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 150px;
+  height: 150px;
+}
+.square-to-show {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 30px;
+  height: 30px;
 }
 .square-winner {
   background-color: yellow;
@@ -88,6 +104,7 @@ body {
   display: flex;
   flex-direction: row;
 }
+
 
 .game-info {
   margin-left: 20px;
