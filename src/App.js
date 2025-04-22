@@ -1,11 +1,14 @@
 import logo from "./logo.svg";
 import { useState } from "react";
 import "./App.css";
-function Square({ value, onSquareClick }) {
+function Square({ value, onSquareClick,highlight }) {
   return (
-    <button onClick={onSquareClick} className="square">
-      {value}
-    </button>
+    <button
+    onClick={onSquareClick}
+    className={`square ${highlight ? "square-winner" : ""}`}
+  >
+    {value}
+  </button>
   );
 }
 
@@ -23,14 +26,14 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {winner: squares[a], lines: lines[i]};
     }
   }
-  return null;
+  return {winner: null, lines: []};
 }
 
 function Board({ xIsNext, squares, onPlay }) {
-  const winner = calculateWinner(squares);
+  const {winner,lines} = calculateWinner(squares);
   let status;
   if (winner) {
     status = "Winner: " + winner;
@@ -39,7 +42,8 @@ function Board({ xIsNext, squares, onPlay }) {
   }
   function handleClick(i) {
     const nextSquares = squares.slice();
-    if (squares[i] || calculateWinner(squares)) {
+    let {winner,_} = calculateWinner(nextSquares);
+    if (squares[i] || winner) {
       return;
     }
     if (xIsNext) {
@@ -50,26 +54,22 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);
   }
 
-  const boardRows = [0, 1, 2].map((i) => {
-    return (
-      <>
-        <div key={i} className="board-row">
+  const boardRows = [0, 1, 2].map((i) => (
+    <div key={i} className="board-row">
+      {[0, 1, 2].map((j) => {
+        const index = i * 3 + j;
+        const isHighlighted = lines?.includes(index);
+        return (
           <Square
-            value={squares[i * 3]}
-            onSquareClick={() => handleClick(i * 3)}
+            key={index}
+            value={squares[index]}
+            onSquareClick={() => handleClick(index)}
+            highlight={isHighlighted}
           />
-          <Square
-            value={squares[i * 3 + 1]}
-            onSquareClick={() => handleClick(i * 3 + 1)}
-          />
-          <Square
-            value={squares[i * 3 + 2]}
-            onSquareClick={() => handleClick(i * 3 + 2)}
-          />
-        </div>
-      </>
-    );
-  });
+        );
+      })}
+    </div>
+  ));
 
   return (
     <>

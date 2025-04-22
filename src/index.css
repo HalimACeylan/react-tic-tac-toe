@@ -15,26 +15,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.square {
-  width: 100px;
-  height: 100px;
-  background-color: #4a90e2;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.square:hover {
-  background-color: #357ABD;
-  cursor: pointer;
-}
-.square>text {
-  font-size: 24px;
-  color: white;
-}
-
-.board-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-}
